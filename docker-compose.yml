@@ -1,0 +1,16 @@
+version: '3'
+services:
+  booknook:                          # Named after your project
+    build:
+      context: .                     # Uses the current directory
+      dockerfile: Dockerfile         # Uses your Next.js Dockerfile
+    ports:
+      - "3000:3000"                 # Maps port for Next.js
+    environment:
+      - NODE_ENV=development        # Set to development for your Next.js dev environment
+      - NEXT_TELEMETRY_DISABLED=1   # Disables Next.js telemetry
+    volumes:
+      - .:/app                      # Maps your project files for hot reloading
+      - /app/node_modules           # Preserves container node_modules
+      - /app/.next                  # Preserves Next.js build cache
+    command: npm run dev            # Runs Next.js in development mode with turbopack (as per your package.json)
