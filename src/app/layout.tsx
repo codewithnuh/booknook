@@ -1,18 +1,30 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import Header from "@/components/globals/header";
+import Footer from "@/components/globals/footer";
+import { ClerkProvider } from "@clerk/nextjs";
 
-const poppinsRegular = localFont({
-  src: "./fonts/Poppins-Regular.woff",
-  variable: "--font-poppins-regular",
-});
-const poppinsMedium = localFont({
-  src: "./fonts/Poppins-Medium.woff",
-  variable: "--font-poppins-medium",
-});
-const poppinsBold = localFont({
-  src: "./fonts/Poppins-Bold.woff",
-  variable: "--font-poppins-bold",
+const poppins = localFont({
+  src: [
+    {
+      path: "./fonts/Poppins-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Poppins-Medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Poppins-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-poppins",
 });
 
 export const metadata: Metadata = {
@@ -26,12 +38,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${poppinsRegular.variable} ${poppinsMedium.variable} ${poppinsBold.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${poppins.variable} antialiased bg-background`}>
+          <ThemeProvider attribute={"class"} defaultTheme="dark">
+            <Header />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
